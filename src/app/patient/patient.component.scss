@@ -1,0 +1,64 @@
+h2 {
+  margin: 0;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid grey;
+}
+
+.dialog-content {
+  border: 1px solid grey;
+  padding: 0;
+  margin: 0;
+  margin: 1rem 0;
+}
+
+.diagnosis-details {
+  border-bottom: 1px solid grey;
+  padding: 1rem;
+
+  .diagnosis-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .diagnosis-message-details {
+    display: flex;
+    align-items: start;
+    padding: 0.8rem 0;
+
+    .diagnosis-message {
+      margin-left: 1rem;
+    }
+  }
+
+  .diagnosis-codes span {
+    &:first-child {
+      margin-left: 2.5rem;
+    }
+    &:nth-child(2) {
+      margin-left: 2rem;
+    }
+  }
+
+  .diagnosis-review-button {
+    margin-top: 0.8rem;
+    margin-left: 2.5rem;
+  }
+
+  .diagnosis-codes-last {
+    padding-top: 1rem;
+  }
+}
+
+.diagnosis-estimated-price {
+  background-color: lightgray;
+  padding: 1rem;
+  border: none;
+}
+
+.mat-button {
+  margin-right: 1rem;
+}

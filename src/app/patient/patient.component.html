@@ -1,0 +1,67 @@
+<div class="dialog-header">
+  <h2>External Labs</h2>
+  <mat-icon aria-hidden="false" aria-label="home icon">close</mat-icon>
+</div>
+
+<mat-dialog-content class="dialog-content">
+  <div class="diagnosis-details">
+    <div class="diagnosis-header">
+      <h2>Iron Total</h2>
+      <h2>$169</h2>
+    </div>
+    <div class="diagnosis-message-details">
+      <mat-icon aria-hidden="false" aria-label="warning icon">warning</mat-icon>
+      <span class="diagnosis-message">Slected diagnosis do not satisfy Medicines Limited Coverage Policy.</span>
+    </div>
+
+    <div class="diagnosis-codes">
+      <span>Diagnosis Code 1</span>
+      <span>DX5.1</span>
+    </div>
+    <button mat-button class="diagnosis-review-button">Review Policy and Confirm Diagnosis</button>
+  </div>
+
+  <div class="diagnosis-details">
+    <div class="diagnosis-header">
+      <h2>Hemoglobin A1C</h2>
+      <h2>$39</h2>
+    </div>
+    <div class="diagnosis-message-details">
+      <mat-icon aria-hidden="false" aria-label="info icon">info</mat-icon>
+      <span class="diagnosis-message">The patient's health plan indicates a frequency limit on coverage for this test,
+        if exceeded. the patient
+        may be financially liable.</span>
+    </div>
+
+    <div class="diagnosis-codes">
+      <span>Diagnosis Code 2</span>
+      <span>DX5.2</span>
+    </div>
+  </div>
+
+  <div class="diagnosis-details">
+    <div class="diagnosis-header">
+      <h2>Lipid Panel</h2>
+      <h2>$30</h2>
+    </div>
+    <div class="diagnosis-codes diagnosis-codes-last">
+      <span>Diagnosis Code 3</span>
+      <span>DX5.3</span>
+    </div>
+  </div>
+  <div class="diagnosis-details diagnosis-estimated-price">
+    <div class="diagnosis-header">
+      <h2>Estimated Patient Pricing</h2>
+      <h2>$238</h2>
+    </div>
+  </div>
+</mat-dialog-content>
+<span>
+  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid tempora dolores nesciunt! Sit harum et maiores!
+  Iusto voluptatum exercitationem, quam ex quaerat necessitatibus nam placeat neque unde architecto esse cumque a est
+  corrupti repellat libero
+</span>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close class="mat-button">Pend</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Continue with Order</button>
+</mat-dialog-actions>
