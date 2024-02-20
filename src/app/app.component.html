@@ -1,8 +1,8 @@
 <div class="container">
   <div style="text-align: center">
     <h1>Smart on FHIR - Patient Info</h1>
-    <p><strong>Username:</strong> fhircamila</p>
-    <p><strong>Password:</strong> epicepic1</p>
+    <p><strong>Username:</strong> FHIR</p>
+    <p><strong>Password:</strong> EpicFhir11! </p>
     <a *ngIf="!code" class="btn btn-info" style="text-decoration: none" target="_self" [href]="authorizeLink">
       Sign in
     </a>
@@ -10,41 +10,23 @@
   </div>
   <div *ngIf="accesstoken">
     <p><strong>Patient Id:</strong> {{ patient }}</p>
-    <strong>Name: </strong>{{ patientdata.name[0].text }}<br />
-    <strong>Birth Date: </strong>{{ patientdata.birthDate }} <br />
-    <strong>Gender: </strong>{{ patientdata.gender }} <br />
-    <strong>Vital Status: </strong>{{ patientdata.deceasedBoolean ? "Dead" : "Alive" }} <br />
-    <strong>Marital Status: </strong>{{ patientdata.maritalStatus.text }} <br />
-    <strong>Telecom: </strong> <br />
-    <div *ngFor="let telecom of patientdata.telecom">
-      <div class="ml-2">
-        <strong>{{ telecom.system }}</strong> -
-        {{ telecom.use }}
-        {{ telecom.value }}
-      </div>
-    </div>
-    <strong>Address: </strong> <br />
-    <div *ngFor="let address of patientdata.address">
-      <div class="ml-2">
-        <strong>{{ address.use }} -</strong>
-        {{ address.line.toString() }}, {{ address.city }},
-        {{ address.district }}, {{ address.state }}, {{ address.postalCode }},
-        {{ address.country }}
-        <span *ngIf="address.period?.start"><strong>From</strong></span>
-        {{ address.period?.start }}
-      </div>
-    </div>
-    <strong>Language: </strong>{{ patientdata.communication[0].language.coding[0].display }} <br />
-    <strong>General Practitioner </strong>{{ patientdata.generalPractitioner[0].display }}<br />
-    <strong>Managing Organization </strong>{{ patientdata.managingOrganization.display }}<br />
-    <hr />
-    <strong>Access code:</strong>
-    <p class="ml-2" style="word-break: break-all">{{ accesstoken }}</p>
-    <strong>Patient Resource:</strong>
-    <pre>{{ patientdata.toString() }}</pre>
+    <span *ngIf="response.entry[0].resource.subject">
+      medicationReferences of <strong>{{response.entry[0].resource.subject.display }}</strong> :
+    </span>
+
+    <ng-container *ngIf="!response.entry[0].resource.subject">
+      There are no medications for patient: <strong>{{response.entry[0].resource.subject.display }}</strong>
+    </ng-container>
+
+    <span *ngFor="let medications of response.entry">
+      <ng-container *ngIf="medications.resource">
+        <p> {{ medications.resource.medicationReference.display}} </p>
+      </ng-container>
+    </span>
+
   </div>
 
   <button mat-button (click)="openModal()">Open Modal</button>
-<!-- {{openModal()}} -->
-  
+  <!-- {{openModal()}} -->
+
 </div>

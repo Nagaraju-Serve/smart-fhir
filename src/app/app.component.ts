@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PatientComponent } from './patient/patient.component';
+import FHIR from 'fhirclient';
+
 
 @Component({
   selector: 'app-root',
@@ -14,13 +16,23 @@ export class AppComponent implements OnInit {
   accesstoken = '';
   patient = '';
   patientdata: any = {};
-  clientId = '42f3b173-16a8-4c50-a3ea-0269294cb869'; // Replace with your client id 6961cae0-e756-4706-a6ac-6e82aaf0a2aa
-  redirect = 'http://localhost:3000';
+  clientId = '058ab5b5-c78d-4b3b-91a1-8bd1daabc049'; // Replace with your client id 6961cae0-e756-4706-a6ac-6e82aaf0a2aa
+  redirect = 'https://localhost:4200';
+  response: any;
+  orders: any;
 
   constructor(public dialog: MatDialog, private route: ActivatedRoute, private router: Router, private http: HttpClient) { }
+  aud = 'https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4';
 
   get authorizeLink(): string {
-    return `https://fhir.epic.com/interconnect-fhir-oauth/oauth2/authorize?response_type=code&redirect_uri=${this.redirect}&client_id=${this.clientId}&state=1234&scope=patient.read patient.search`;
+    // FHIR.oauth2.authorize({
+    //   'clientId': this.clientId,
+    //   'scope': 'patient.read patient.search observation.search servicerequest.search launch openid patient/*.read',
+    //   'redirectUri': this.redirect,
+    //   'iss': this.aud
+    // })
+
+    return `https://fhir.epic.com/interconnect-fhir-oauth/oauth2/authorize?response_type=code&redirect_uri=${this.redirect}&iss=${this.aud}&aud=${this.aud}&client_id=${this.clientId}&state=1234&scope=launch/patient user/*.* patient/*.read patient.read patient.search servicerequest.read servicerequest.serach`;
   }
 
   openModal(): void {
@@ -35,17 +47,38 @@ export class AppComponent implements OnInit {
     });
   }
 
+  // ngOnInit(): void {
+  //   FHIR.oauth2.ready().then((client) => {
+  //     const access_token = client.state.tokenResponse?.access_token ?? "";
+  //     this.doRequests(access_token);
+  //   })
+  // }
+
+  // async doRequests(accessToken: string) {
+  //   const patientID: string = "egqBHVfQlt4Bw3XGXoxVxHg3"; // Testing with sample patient from Epic's sandbox test data
+  //   const obs = await fetch("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/AllergyIntolerance?patient=" + patientID, {
+  //     headers: {
+  //       "Accept": "application/json+fhir",
+  //       "Authorization": "Bearer " + accessToken
+  //     }
+  //   }).then(function (data) {
+  //     console.log(data, '@@@@@@@@@@@@@@@');
+      
+  //     return data
+  //   });
+  // }
+
   ngOnInit(): void {
     const loc = location.href.replace('/?', '?');
     const url = new URL(loc);
     this.code = url.searchParams.get('code');
 
 
-    this.router.navigate([this.redirect], { replaceUrl: true })
-    console.log(this.router);
-
+    // this.router.navigate([this.redirect], { replaceUrl: true })
+    // console.log(this.router);
+    const params = new URLSearchParams();
+    // this.code = params.get('code');
     if (this.code) {
-      const params = new URLSearchParams();
       params.append('grant_type', 'authorization_code');
       params.append('redirect_uri', this.redirect);
       params.append('code', this.code);
@@ -62,18 +95,42 @@ export class AppComponent implements OnInit {
             console.log(response);
             this.accesstoken = response.access_token;
             this.getPatientData(response.access_token, response.patient)
+            this.getMedicationRequestData(response.access_token, response.patient)
+            this.getServiceData(response.access_token, response.patient)
             this.patient = response.patient;
           });
     }
 
   }
 
-  getPatientData = (token: string, patient: string) => {
-    return this.http.get(`https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Patient/${patient}`,
+  getMedicationRequestData = (token: string, patient: string) => {
+    return this.http.get(`https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/MedicationRequest?patient=${patient}`,
       { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) })
       .subscribe(
         (response: any) => {
-          this.patientdata = response;
+          this.response = response;
+          console.log(response);
+        }
+      );
+  }
+
+  getPatientData = (token: string, patient: string) => {
+    return this.http.get(`https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Patient?patient=${patient}`,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) })
+      .subscribe(
+        (response: any) => {
+          // this.response = response;
+          console.log(response);
+        }
+      );
+  }
+
+  getServiceData = (token: string, patient: string) => {
+    return this.http.get(`https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/ServiceRequest?patient=${patient}`,
+      { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) })
+      .subscribe(
+        (response: any) => {
+          this.orders = response;
           console.log(response);
         }
       );
