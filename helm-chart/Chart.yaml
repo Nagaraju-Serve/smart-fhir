@@ -1,0 +1,4 @@
+apiVersion: v2
+name: smart-fhir
+description: A Helm chart for deploying Angular Smart-App application
+version: 0.1.0

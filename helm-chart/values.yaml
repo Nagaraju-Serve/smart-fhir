@@ -1,0 +1,22 @@
+# Add any configurable values here
+replicaCount: 1
+
+image:
+  repository: 30cf2a67cbae0e5ca8a4a1cc415f2126ae603fb577a4881ba075776273ea81cf
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - /
+  tls: []
+
+resources: {}
